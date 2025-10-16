@@ -1,0 +1,1 @@
+Dynamic Quote Generator. A vanilla JS project demonstrating advanced DOM manipulation.
