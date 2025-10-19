@@ -1,5 +1,6 @@
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
 let lastFilter = localStorage.getItem('lastFilter') || 'all';
+const API_URL = 'https://jsonplaceholder.typicode.com/posts'; // mock server
 
 function displayQuotes(filteredQuotes = quotes) {
   const quoteDisplay = document.getElementById('quoteDisplay');
@@ -25,11 +26,11 @@ function addQuote() {
     return;
   }
 
-  const newQuote = { text, author, category };
+  const newQuote = { text, author, category, id: Date.now() };
   quotes.push(newQuote);
   saveQuotes();
   populateCategories();
-  filterQuotes(); // reapply filter so the new one shows if matches
+  filterQuotes();
   document.getElementById('quoteInput').value = '';
   document.getElementById('authorInput').value = '';
   document.getElementById('categoryInput').value = '';
@@ -86,11 +87,51 @@ function importFromJsonFile(event) {
   fileReader.readAsText(event.target.files[0]);
 }
 
+async function syncQuotes() {
+  const notification = document.getElementById('notification');
+  notification.textContent = 'Syncing with server...';
+
+  try {
+    // Simulate fetching server data
+    const response = await fetch(API_URL);
+    const serverData = await response.json();
+
+    // Simulate that only 5 random items are quotes
+    const serverQuotes = serverData.slice(0, 5).map(item => ({
+      id: item.id,
+      text: item.title,
+      author: 'Server',
+      category: 'ServerData'
+    }));
+
+    // Merge and resolve conflicts (server wins)
+    const localIds = new Set(quotes.map(q => q.id));
+    const merged = [
+      ...quotes.filter(q => !serverQuotes.some(sq => sq.id === q.id)),
+      ...serverQuotes
+    ];
+
+    quotes = merged;
+    saveQuotes();
+    populateCategories();
+    filterQuotes();
+
+    notification.textContent = 'Sync complete! Server data updated.';
+  } catch (error) {
+    console.error('Sync failed:', error);
+    notification.textContent = 'Sync failed. Please try again.';
+  }
+
+  // Clear notification after 5 seconds
+  setTimeout(() => (notification.textContent = ''), 5000);
+}
+
 // Initialize
 window.onload = function() {
   populateCategories();
   filterQuotes();
 };
+
 
 
 
