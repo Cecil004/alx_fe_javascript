@@ -5,52 +5,45 @@ const quotes = [
   { text: "Life is 10% what happens to us and 90% how we react to it.", category: "Life" }
 ];
 
-// function expected by the checker to display a random quote
+// function to display a random quote and update the DOM
 function displayRandomQuote() {
   const quoteDisplay = document.getElementById("quoteDisplay");
 
-  if (!quoteDisplay) return;
-
   if (quotes.length === 0) {
-    quoteDisplay.innerHTML = "<p>No quotes available!</p>";
+    quoteDisplay.innerHTML = "No quotes available!";
     return;
   }
 
   const randomIndex = Math.floor(Math.random() * quotes.length);
-  const selected = quotes[randomIndex];
+  const randomQuote = quotes[randomIndex];
 
-  quoteDisplay.innerHTML = "<p>\"" + selected.text + "\"</p><p><em>Category: " + selected.category + "</em></p>";
+  quoteDisplay.innerHTML = `"${randomQuote.text}"<br><em>Category: ${randomQuote.category}</em>`;
 }
 
-// function expected by the checker to add a new quote to the quotes array and update the DOM
+// function to add a new quote to the quotes array and update the DOM
 function addQuote() {
   const textInput = document.getElementById("newQuoteText");
   const categoryInput = document.getElementById("newQuoteCategory");
 
-  if (!textInput || !categoryInput) return;
-
   const text = textInput.value.trim();
   const category = categoryInput.value.trim();
 
-  if (!text || !category) {
+  if (text === "" || category === "") {
     alert("Please fill in both fields!");
     return;
   }
 
   quotes.push({ text: text, category: category });
 
-  // clear inputs
   textInput.value = "";
   categoryInput.value = "";
 
-  // update DOM to show the newly added quote immediately
   displayRandomQuote();
 }
 
-// event listener on the "Show New Quote" button (checker expects an event listener as well)
-const newQuoteBtn = document.getElementById("newQuote");
-if (newQuoteBtn) {
-  newQuoteBtn.addEventListener("click", displayRandomQuote);
-}
+// event listeners for buttons
+document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
+document.getElementById("addQuoteButton").addEventListener("click", addQuote);
+
 
 
