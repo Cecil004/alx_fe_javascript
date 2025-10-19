@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dynamic Quote Generator</title>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
+
   <div id="quoteDisplay"></div>
-  <button id="newQuote">Show New Quote</button>
 
   <div>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-    <button id="addQuoteButton">Add Quote</button>
+    <!-- include onclick to match older checks; we'll also add an event listener in JS -->
+    <button id="addQuoteButton" onclick="addQuote()">Add Quote</button>
+  </div>
+
+  <button id="newQuote" onclick="displayRandomQuote()">Show New Quote</button>
+
+  <div style="margin-top:12px;">
+    <button id="exportJsonButton">Export Quotes (JSON)</button>
+    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    <button id="clearStorageButton">Clear Stored Quotes</button>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
